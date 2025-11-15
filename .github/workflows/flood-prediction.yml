@@ -1,0 +1,43 @@
+name: Daily Flood Prediction
+
+on:
+  schedule:
+    # Runs daily at 18:45 UTC (00:15 AM Sri Lanka time - UTC+5:30)
+    - cron: '45 18 * * *'
+  workflow_dispatch:  # Allows manual runs
+
+jobs:
+  predict-flood:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+      
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 📦 Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: 🚀 Run Flood Prediction (SECURE)
+      env:
+        THINGSBOARD_USERNAME: ${{ secrets.THINGSBOARD_USERNAME }}
+        THINGSBOARD_PASSWORD: ${{ secrets.THINGSBOARD_PASSWORD }}
+        THINGSBOARD_DEVICE_ID: ${{ secrets.THINGSBOARD_DEVICE_ID }}
+        THINGSBOARD_TOKEN: ${{ secrets.THINGSBOARD_TOKEN }}
+        SHEET_URL: ${{ secrets.SHEET_URL }}
+      run: python main_github.py
+      
+    - name: 💾 Upload Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: prediction-results
+        path: |
+          daily_flood_data.csv
+        retention-days: 30

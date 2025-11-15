@@ -1,0 +1,20 @@
+# Virtual environments
+venv/
+venvenv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE files
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Large data files (optional)
+*.csv
+!daily_flood_data.csv
