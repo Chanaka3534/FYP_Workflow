@@ -1,7 +1,7 @@
-# save_daily_data_csv.py
 import csv
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo   # <-- Add this
 
 def save_daily_data_csv(rainfall, waterlevel, water_depth, spilling_cusec, 
                        catchment_rainfall, predicted_water_level, final_risk):
@@ -23,13 +23,18 @@ def save_daily_data_csv(rainfall, waterlevel, water_depth, spilling_cusec,
     # Convert water depth from feet to meters
     water_depth_m = float(water_depth) * 0.3048
 
+    # ============================
+    # 🇱🇰 Convert to Sri Lanka Time
+    # ============================
+    sri_lanka_time = datetime.now(ZoneInfo("Asia/Colombo")).strftime("%Y-%m-%d %H:%M:%S")
+
     with open(filename, mode="a", newline="") as file:
         writer = csv.writer(file)
 
         # Write header only once
         if not file_exists:
             writer.writerow([
-                "Date", 
+                "Date (Sri Lanka Time)", 
                 "Downstream Rainfall(mm)", 
                 "Waterlevel(m)", 
                 "Water Depth(Sena Dam)m", 
@@ -41,12 +46,12 @@ def save_daily_data_csv(rainfall, waterlevel, water_depth, spilling_cusec,
 
         # Write data row
         writer.writerow([
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            sri_lanka_time,
             float(rainfall),
-            round(waterlevel_m, 3),  # In meters, rounded to 3 decimal places
-            round(water_depth_m, 3),  # In meters, rounded to 3 decimal places
+            round(waterlevel_m, 3),
+            round(water_depth_m, 3),
             float(spilling_cusec),
             float(catchment_rainfall),
-            round(predicted_water_level_m, 3),  # In meters, rounded to 3 decimal places
+            round(predicted_water_level_m, 3),
             risk_value
         ])
