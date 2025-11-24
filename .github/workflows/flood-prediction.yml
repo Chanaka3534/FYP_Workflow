@@ -2,7 +2,7 @@ name: Daily Flood Prediction
 
 on:
   schedule:
-    - cron: '31 18 * * *'
+    - cron: '33 18 * * *'
   workflow_dispatch:
 
 jobs:
