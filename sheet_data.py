@@ -4,30 +4,30 @@ from io import StringIO
 
 def get_sheet_data(csv_url):
     try:
-        # Fetch CSV from Google Sheets
         response = requests.get(csv_url)
         response.raise_for_status()
 
-        # Read CSV into DataFrame
         df = pd.read_csv(StringIO(response.text))
-
-        # Strip extra spaces from column names
         df.columns = df.columns.str.strip()
 
-        # Ensure there are at least 9 rows
         if len(df) >= 8:
-            # Get the 9th row (index 7)
             row = df.iloc[7]
 
-            # Fetch values
-            water_depth = row.get("Water Depth_ft", None)
-            spilling_cusec = row.get("Spilling_Cusec", 0)
+            def clean_number(value):
+                if value is None:
+                    return None
+                if isinstance(value, str):
+                    value = value.replace(",", "").strip()
+                try:
+                    return float(value)
+                except:
+                    return None
 
-            # Handle NaN
-            if pd.isna(spilling_cusec):
-                spilling_cusec = 0
+            water_depth = clean_number(row.get("Water Depth_ft"))
+            spilling_cusec = clean_number(row.get("Spilling_Cusec"))
 
-            return float(water_depth), float(spilling_cusec)
+            return water_depth, spilling_cusec
+        
         else:
             raise ValueError("CSV does not have 9 rows yet")
 
