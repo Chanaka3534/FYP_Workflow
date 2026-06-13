@@ -46,13 +46,21 @@ def save_daily_data_csv(rainfall, waterlevel, water_depth, spilling_cusec,
             ])
 
         # Write data row
+    
+  catchment_rainfall =  0 if pd.isna(catchment_rainfall) else catchment_rainfall,
+  rainfall =   0 if pd.isna(rainfall) else rainfall,
+  water_depth =  0 if pd.isna(water_depth) else water_depth,
+  spilling_cusec =  0 if pd.isna(spilling_cusec) else spilling_cusec,
+  waterlevel =  0 if pd.isna(waterlevel) else waterlevel,
+catchment_rainfall = 0 if pd.isna(catchment_rainfall) else catchment_rainfall,
+predicted_water_level_m = 0 if pd.isna(predicted_water_level_m) else predicted_water_level_m
+
         writer.writerow([
             sri_lanka_time,
             float(rainfall),
             round(waterlevel_m, 3),
             round(water_depth_m, 3),
-          float(spilling_cusec),
-        
+            float(spilling_cusec),
             float(catchment_rainfall),
             round(predicted_water_level_m, 3),
             risk_value
