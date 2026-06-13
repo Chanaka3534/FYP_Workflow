@@ -25,7 +25,7 @@ def get_sheet_data(csv_url):
 
             water_depth = clean_number(row.get("Water Depth_ft"))
             spilling_cusec = clean_number(row.get("Spilling_Cusec"))
-
+spilling_cusec = 0.0 if pd.isna(spilling_cusec) else float(spilling_cusec)
             return water_depth, spilling_cusec
         
         else:
