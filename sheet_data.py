@@ -17,7 +17,6 @@ def get_sheet_data(csv_url):
             def clean_number(value):
                 if value is None:
                     #return None
-                    #
                     return 0.0
                     #
                 if isinstance(value, str):
