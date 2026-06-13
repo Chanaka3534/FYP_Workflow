@@ -10,7 +10,7 @@ def send_to_thingsboard_demo(device_token, date, water_depth, spilling_cusec, ca
     Only the DATE (Sri Lankan time) is sent.
     """
     water_depth = 0 if water_depth is None else water_depth
-    spilling_cusec = 0 if spilling_cusec is None else spilling_cusec
+  #  spilling_cusec = 0 if spilling_cusec is None else spilling_cusec
      spilling_cusec = 0.0 if pd.isna(spilling_cusec) else float(spilling_cusec)
     catchment_rainfall = 0 if catchment_rainfall is None else catchment_rainfall
     predicted_water_level = 0 if predicted_water_level is None else predicted_water_level
@@ -26,7 +26,8 @@ def send_to_thingsboard_demo(device_token, date, water_depth, spilling_cusec, ca
     payload = {
         "Date": sri_lanka_date,   # <-- Send only date
         "WaterDepth": C_water_depth,
-        "SpillingCusec": float(spilling_cusec),
+     #   "SpillingCusec": float(spilling_cusec),
+         "SpillingCusec": spilling_cusec,
         "CatchmentRainfall": float(catchment_rainfall),
         "PredictedWaterLevel": C_PredictedWaterLevel,
         "FinalEnsembleRisk": final_risk_label
