@@ -10,11 +10,11 @@ def send_to_thingsboard_demo(device_token, date, water_depth, spilling_cusec, ca
     Only the DATE (Sri Lankan time) is sent.
     """
     water_depth = 0 if water_depth is None else water_depth
-    spilling_cusec = 0 if spilling_cusec is None else spilling_cusec
-  #   spilling_cusec = 0.0 if pd.isna(spilling_cusec) else float(spilling_cusec)
+ #   spilling_cusec = 0 if spilling_cusec is None else spilling_cusec
+     spilling_cusec = 0.0 if pd.isna(spilling_cusec) else spilling_cusec
     catchment_rainfall = 0 if catchment_rainfall is None else catchment_rainfall
-    predicted_water_level = 0 if predicted_water_level is None else predicted_water_level
-
+#    predicted_water_level = 0 if predicted_water_level is None else predicted_water_level
+predicted_water_level = 0.0 if pd.isna(predicted_water_level) else predicted_water_level
     # 🇱🇰 Convert to Sri Lankan DATE only (no time)
     sri_lanka_date = datetime.now(ZoneInfo("Asia/Colombo")).strftime("%Y-%m-%d")
 
