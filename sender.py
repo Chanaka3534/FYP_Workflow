@@ -1,4 +1,5 @@
 import requests  # type: ignore
+import pandas as pd
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -10,6 +11,7 @@ def send_to_thingsboard_demo(device_token, date, water_depth, spilling_cusec, ca
     """
     water_depth = 0 if water_depth is None else water_depth
     spilling_cusec = 0 if spilling_cusec is None else spilling_cusec
+     spilling_cusec = 0.0 if pd.isna(spilling_cusec) else float(spilling_cusec)
     catchment_rainfall = 0 if catchment_rainfall is None else catchment_rainfall
     predicted_water_level = 0 if predicted_water_level is None else predicted_water_level
 
