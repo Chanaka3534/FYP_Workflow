@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import math
 from io import StringIO
 
 def get_sheet_data(csv_url):
@@ -15,13 +16,25 @@ def get_sheet_data(csv_url):
 
             def clean_number(value):
                 if value is None:
-                    return None
+                    #return None
+                    #
+                    return 0.0
+                    #
                 if isinstance(value, str):
                     value = value.replace(",", "").strip()
                 try:
-                    return float(value)
+                    #
+                     value = float(vlaue)
+                    if math.isnan(value) or math.isinf(value):
+                   return 0.0
+
+                return value
+                        #
+                  #  return float(value)
+                
                 except:
-                    return None
+                    return 0.0
+                #    return None
 
             water_depth = clean_number(row.get("Water Depth_ft"))
             spilling_cusec = clean_number(row.get("Spilling_Cusec"))
