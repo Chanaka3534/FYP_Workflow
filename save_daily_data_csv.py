@@ -51,7 +51,7 @@ def save_daily_data_csv(rainfall, waterlevel, water_depth, spilling_cusec,
             float(rainfall),
             round(waterlevel_m, 3),
             round(water_depth_m, 3),
-         #   float(spilling_cusec),
+          float(spilling_cusec),
           spilling_cusec = 0.0 if pd.isna(spilling_cusec) else float(spilling_cusec)
             float(catchment_rainfall),
             round(predicted_water_level_m, 3),
