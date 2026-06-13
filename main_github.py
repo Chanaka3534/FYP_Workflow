@@ -64,7 +64,14 @@ def main():
         print(f"Catchment Rainfall: {catchment_rainfall}")
 
         # Step 4: Prepare input
-        input_data = [catchment_rainfall or 0, rainfall or 0, water_depth or 0, spilling_cusec or 0, waterlevel or 0]
+      #  input_data = [catchment_rainfall or 0, rainfall or 0, water_depth or 0, spilling_cusec or 0, waterlevel or 0]
+      input_data = [
+    0 if pd.isna(catchment_rainfall) else catchment_rainfall,
+    0 if pd.isna(rainfall) else rainfall,
+    0 if pd.isna(water_depth) else water_depth,
+    0 if pd.isna(spilling_cusec) else spilling_cusec,
+    0 if pd.isna(waterlevel) else waterlevel
+]  
         print(f"Input Data: {input_data}")
 
         # Step 5: Predict
