@@ -16,24 +16,15 @@ def get_sheet_data(csv_url):
 
             def clean_number(value):
                 if value is None:
-                    #return None
-                    return 0.0
-                    #
+                    return None
+                    
                 if isinstance(value, str):
                     value = value.replace(",", "").strip()
                 try:
-                    #
-                     value = float(vlaue)
-                    if math.isnan(value) or math.isinf(value):
-                   return 0.0
-
-                return value
-                        #
-                  #  return float(value)
+                     return float(value)
                 
                 except:
-                    return 0.0
-                #    return None
+                     return None
 
             water_depth = clean_number(row.get("Water Depth_ft"))
             spilling_cusec = clean_number(row.get("Spilling_Cusec"))
