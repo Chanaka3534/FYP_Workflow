@@ -20,7 +20,7 @@ def save_daily_data_csv(rainfall, waterlevel, water_depth, spilling_cusec,
     
     # Convert predicted water level from mm to meters
     predicted_water_level_m = float(predicted_water_level) / 1000
-    
+      predicted_water_level_m = 0.0 if pd.isna( predicted_water_level_m) else predicted_water_level_m
     # Convert water depth from feet to meters
     water_depth_m = float(water_depth) * 0.3048
 
