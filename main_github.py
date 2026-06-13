@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 from datetime import datetime
 
 from get_thingsboard_data import get_thingsboard_data
@@ -53,6 +54,7 @@ def main():
         # Step 2: Get Google Sheet data
         print("📊 Getting Google Sheet data...")
         water_depth, spilling_cusec = get_sheet_data(CSV_URL)
+        spilling_cusec = 0.0 if pd.isna(spilling_cusec) else spilling_cusec
         print(f"Water Depth: {water_depth}, Spilling Cusec: {spilling_cusec}")
 
         # Step 3: Get catchment rainfall
