@@ -77,10 +77,10 @@ def main():
         print(f"Final Ensemble Risk: {prediction['final_ensemble_risk']}")
 
         ######
-   catchment_rainfall=  0.0 if pd.isna(catchment_rainfall) else catchment_rainfall,
-   rainfall =  0.0 if pd.isna(rainfall) else rainfall,
-   water_depth =  0.0 if pd.isna(water_depth) else water_depth,
-   spilling_cusec =  0.0 if pd.isna(spilling_cusec) else spilling_cusec,
+   catchment_rainfall=  0.0 if pd.isna(catchment_rainfall) else catchment_rainfall
+   rainfall =  0.0 if pd.isna(rainfall) else rainfall
+   water_depth =  0.0 if pd.isna(water_depth) else water_depth
+   spilling_cusec =  0.0 if pd.isna(spilling_cusec) else spilling_cusec
    waterlevel =   0.0 if pd.isna(waterlevel) else waterlevel
   predicted_water_level = 0.0 if pd.isna(predicted_water_level) else predicted_water_level
 print( {'spilling_cusec'} ,  {'predicted_water_level'})
