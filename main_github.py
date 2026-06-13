@@ -77,14 +77,14 @@ def main():
         print(f"Final Ensemble Risk: {prediction['final_ensemble_risk']}")
 
         ######
-print(f"Rainfall: {spilling_cusec}, Waterlevel: {predicted_water_level}")
+print(f"spill: {spilling_cusec}, predict: {predicted_water_level}")
    catchment_rainfall=  0.0 if pd.isna(catchment_rainfall) else catchment_rainfall
    rainfall =  0.0 if pd.isna(rainfall) else rainfall
    water_depth =  0.0 if pd.isna(water_depth) else water_depth
    spilling_cusec =  0.0 if pd.isna(spilling_cusec) else spilling_cusec
    waterlevel =   0.0 if pd.isna(waterlevel) else waterlevel
   predicted_water_level = 0.0 if pd.isna(predicted_water_level) else predicted_water_level
-print(f"Rainfall: {spilling_cusec}, Waterlevel: {predicted_water_level}")
+print(f"spill: {spilling_cusec}, predict: {predicted_water_level}")
 #####
         # Step 6: Send to ThingsBoard
         print("📤 Sending to ThingsBoard...")
