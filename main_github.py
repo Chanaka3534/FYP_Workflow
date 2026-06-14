@@ -75,7 +75,10 @@ def main():
         print(f"LSTM Water Level: {prediction['predicted_water_level']} mm")
         print(f"LSTM Risk: {prediction['lstm_risk']}, XGBoost Risk: {prediction['xgb_risk']}")
         print(f"Final Ensemble Risk: {prediction['final_ensemble_risk']}")
-
+###test
+        print(f"spill: {spilling_cusec}, prd: {predicted_water_level}")
+        print(f"testing")
+        ##end
         # Step 6: Send to ThingsBoard
         print("📤 Sending to ThingsBoard...")
         status = send_to_thingsboard(
