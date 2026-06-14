@@ -77,7 +77,9 @@ def main():
         print(f"Final Ensemble Risk: {prediction['final_ensemble_risk']}")
 ###test
         print(f"spill: {spilling_cusec}, prd: {prediction['predicted_water_level']}")
-        print(f"testing")
+        spilling_cusec = 0.0 if pd.isna(spilling_cusec) else spilling_cusec
+        prediction['predicted_water_level'] = 0.0 if pd.isna(prediction['predicted_water_level']) else prediction['predicted_water_level']
+        print(f"spill: {spilling_cusec}, prd: {prediction['predicted_water_level']}")
         ##end
         # Step 6: Send to ThingsBoard
         print("📤 Sending to ThingsBoard...")
