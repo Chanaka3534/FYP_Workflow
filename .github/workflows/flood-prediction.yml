@@ -43,7 +43,8 @@ jobs:
         git add daily_flood_data.csv
         if ! git diff --cached --quiet; then
           git commit -m "Update flood monitoring data"
-          git push origin main
+         git pull --rebase origin main
+         git push origin main
         else
           echo "No changes to commit"
         fi
