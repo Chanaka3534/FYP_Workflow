@@ -4,8 +4,10 @@ on:
   schedule:
     - cron: '15 18 * * *'
   workflow_dispatch:
+  
 permissions:
   contents: write
+  
 jobs:
   predict-flood:
     runs-on: ubuntu-latest
