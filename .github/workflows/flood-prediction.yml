@@ -36,18 +36,28 @@ jobs:
         SHEET_URL: ${{ secrets.SHEET_URL }}
       run: python main_github.py
       
-    - name: 💾 Save updated CSV to GitHub
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add daily_flood_data.csv
-        if ! git diff --cached --quiet; then
-         git commit -m "Update flood monitoring data"
-         git fetch origin main 
-         git rebase origin/main
-         git push origin HEAD:main
-        else
-          echo "No changes to commit"
+    - name: Save updated CSV to GitHub 
+      run: | 
+        git config user.name "github-actions[bot]" 
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com" 
+        # Save the newly generated CSV 
+        cp daily_flood_data.csv /tmp/new_daily_flood_data.csv 
+        # Get the latest repository version 
+        git fetch origin main 
+        # Replace the local CSV with the latest GitHub version 
+        git checkout origin/main -- daily_flood_data.csv 
+        # Append only the newly generated data row 
+        if [ -f /tmp/new_daily_flood_data.csv ]; then 
+          tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv 
+          fi 
+          
+          # Commit and push the combined CSV 
+        git add daily_flood_data.csv 
+        if ! git diff --cached --quiet; then 
+          git commit -m "Update flood monitoring data" 
+          git push origin HEAD:main 
+        else 
+          echo "No new data to commit" 
         fi
       
     - name: 💾 Upload Results
