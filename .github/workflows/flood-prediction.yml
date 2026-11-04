@@ -7,6 +7,10 @@ on:
   
 permissions:
   contents: write
+
+concurrency:
+  group: daily-flood-prediction
+  cancel-in-progress: false  
    
 jobs:
   predict-flood:
@@ -61,37 +65,51 @@ jobs:
     #     fi
     - name: Save updated CSV to GitHub
       run: |
+        set -e
+
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-        # Preserve the newly generated CSV
+        # Save the newly generated prediction CSV
         cp daily_flood_data.csv /tmp/new_daily_flood_data.csv
 
-        # Fetch the latest main branch
-        git fetch origin main
+        # Retry in case main changes while this workflow is running
+        for attempt in 1 2 3 4 5; do
+          echo "Push attempt $attempt"
 
-        # Move the local branch to the latest remote commit
-        git checkout -B main origin/main
+          git fetch origin main
+          git checkout -B main origin/main
 
-        # Append new data, excluding the header
-        if [ -f /tmp/new_daily_flood_data.csv ]; then
+          # Append new prediction row(s), excluding the header
           tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv
-        fi
 
-        # Keep header plus latest 10 data rows
-        head -n 1 daily_flood_data.csv > /tmp/ten_days.csv
-        tail -n 10 daily_flood_data.csv >> /tmp/ten_days.csv
-        mv /tmp/ten_days.csv daily_flood_data.csv
+          # Keep the header and latest 10 data rows
+          head -n 1 daily_flood_data.csv > /tmp/ten_days.csv
+          tail -n 10 daily_flood_data.csv >> /tmp/ten_days.csv
+          mv /tmp/ten_days.csv daily_flood_data.csv
 
-        # Commit and push
-        git add daily_flood_data.csv
+          git add daily_flood_data.csv
 
-        if ! git diff --cached --quiet; then
+          if git diff --cached --quiet; then
+            echo "No new data to commit"
+            exit 0
+          fi
+
           git commit -m "Update flood monitoring data"
-          git push origin main
-        else
-          echo "No new data to commit"
-        fi
+
+          if git push origin main; then
+            echo "Push successful"
+            exit 0
+          fi
+
+          echo "Push failed; retrying with latest main..."
+
+          # Remove the local commit and restore the latest remote version
+          git reset --hard origin/main
+        done
+
+        echo "Failed to push after 5 attempts"
+        exit 1
         
     - name: 💾 Upload Results
       uses: actions/upload-artifact@v4
