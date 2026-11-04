@@ -2,3 +2,7 @@ Date,Downstream Rainfall(mm),Waterlevel(m),Water Depth(Sena Dam)m,Spilling (Sena
 Date,Downstream Rainfall(mm),Waterlevel(m),Water Depth(Sena Dam)m,Spilling (Sena Dam) Cusec,Catchment Rainfall(mm),Predicted Water Level (LSTM)(m),Final Ensemble Flood Risk
 2026-11-04 16:10:57,71977.5,-1.0,17.496,0.0,9.0,0.215,0
 2026-11-04 16:10:57,71977.5,-1.0,17.496,0.0,9.0,0.215,0
+Date,Downstream Rainfall(mm),Waterlevel(m),Water Depth(Sena Dam)m,Spilling (Sena Dam) Cusec,Catchment Rainfall(mm),Predicted Water Level (LSTM)(m),Final Ensemble Flood Risk
+2026-11-04 16:10:57,71977.5,-1.0,17.496,0.0,9.0,0.215,0
+2026-11-04 16:10:57,71977.5,-1.0,17.496,0.0,9.0,0.215,0
+2026-11-04 16:23:22,71977.5,-1.0,17.496,0.0,9.0,0.215,0
