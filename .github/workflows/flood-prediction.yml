@@ -40,76 +40,76 @@ jobs:
         SHEET_URL: ${{ secrets.SHEET_URL }}
       run: python main_github.py
       
-    # - name: Save updated CSV to GitHub 
-    #   run: | 
-    #     git config user.name "github-actions[bot]" 
-    #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com" 
-    #     # Save the newly generated CSV 
-    #     cp daily_flood_data.csv /tmp/new_daily_flood_data.csv 
-    #     # Get the latest repository version 
-    #     git fetch origin main 
-    #     # Replace the local CSV with the latest GitHub version 
-    #     git checkout origin/main -- daily_flood_data.csv 
-    #     # Append only the newly generated data row 
-    #     if [ -f /tmp/new_daily_flood_data.csv ]; then 
-    #       tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv 
-    #       fi 
+    - name: Save updated CSV to GitHub 
+      run: | 
+        git config user.name "github-actions[bot]" 
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com" 
+        # Save the newly generated CSV 
+        cp daily_flood_data.csv /tmp/new_daily_flood_data.csv 
+        # Get the latest repository version 
+        git fetch origin main 
+        # Replace the local CSV with the latest GitHub version 
+        git checkout origin/main -- daily_flood_data.csv 
+        # Append only the newly generated data row 
+        if [ -f /tmp/new_daily_flood_data.csv ]; then 
+          tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv 
+          fi 
           
-    #       # Commit and push the combined CSV 
-    #     git add daily_flood_data.csv 
-    #     if ! git diff --cached --quiet; then 
-    #       git commit -m "Update flood monitoring data" 
-    #       git push origin HEAD:main 
-    #     else 
-    #       echo "No new data to commit" 
-    #     fi
-    - name: Save updated CSV to GitHub
-      run: |
-        set -e
+          # Commit and push the combined CSV 
+        git add daily_flood_data.csv 
+        if ! git diff --cached --quiet; then 
+          git commit -m "Update flood monitoring data" 
+          git push origin HEAD:main 
+        else 
+          echo "No new data to commit" 
+        fi
+    # - name: Save updated CSV to GitHub
+    #   run: |
+    #     set -e
 
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    #     git config user.name "github-actions[bot]"
+    #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-        # Save the newly generated prediction CSV
-        cp daily_flood_data.csv /tmp/new_daily_flood_data.csv
+    #     # Save the newly generated prediction CSV
+    #     cp daily_flood_data.csv /tmp/new_daily_flood_data.csv
 
-        # Retry in case main changes while this workflow is running
-        for attempt in 1 2 3 4 5; do
-          echo "Push attempt $attempt"
+    #     # Retry in case main changes while this workflow is running
+    #     for attempt in 1 2 3 4 5; do
+    #       echo "Push attempt $attempt"
 
-          git fetch origin main
-          git checkout -B main origin/main
+    #       git fetch origin main
+    #       git checkout -B main origin/main
 
-          # Append new prediction row(s), excluding the header
-          tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv
+    #       # Append new prediction row(s), excluding the header
+    #       tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv
 
-          # Keep the header and latest 10 data rows
-          head -n 1 daily_flood_data.csv > /tmp/ten_days.csv
-          tail -n 10 daily_flood_data.csv >> /tmp/ten_days.csv
-          mv /tmp/ten_days.csv daily_flood_data.csv
+    #       # Keep the header and latest 10 data rows
+    #       head -n 1 daily_flood_data.csv > /tmp/ten_days.csv
+    #       tail -n 10 daily_flood_data.csv >> /tmp/ten_days.csv
+    #       mv /tmp/ten_days.csv daily_flood_data.csv
 
-          git add daily_flood_data.csv
+    #       git add daily_flood_data.csv
 
-          if git diff --cached --quiet; then
-            echo "No new data to commit"
-            exit 0
-          fi
+    #       if git diff --cached --quiet; then
+    #         echo "No new data to commit"
+    #         exit 0
+    #       fi
 
-          git commit -m "Update flood monitoring data"
+    #       git commit -m "Update flood monitoring data"
 
-          if git push origin main; then
-            echo "Push successful"
-            exit 0
-          fi
+    #       if git push origin main; then
+    #         echo "Push successful"
+    #         exit 0
+    #       fi
 
-          echo "Push failed; retrying with latest main..."
+    #       echo "Push failed; retrying with latest main..."
 
-          # Remove the local commit and restore the latest remote version
-          git reset --hard origin/main
-        done
+    #       # Remove the local commit and restore the latest remote version
+    #       git reset --hard origin/main
+    #     done
 
-        echo "Failed to push after 5 attempts"
-        exit 1
+    #     echo "Failed to push after 5 attempts"
+    #     exit 1
     # - name: Diagnose Git branch state
     #   run: |
     #     set -x
