@@ -63,83 +63,83 @@ jobs:
     #     else 
     #       echo "No new data to commit" 
     #     fi
-    # - name: Save updated CSV to GitHub
-    #   run: |
-    #     set -e
-
-    #     git config user.name "github-actions[bot]"
-    #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-    #     # Save the newly generated prediction CSV
-    #     cp daily_flood_data.csv /tmp/new_daily_flood_data.csv
-
-    #     # Retry in case main changes while this workflow is running
-    #     for attempt in 1 2 3 4 5; do
-    #       echo "Push attempt $attempt"
-
-    #       git fetch origin main
-    #       git checkout -B main origin/main
-
-    #       # Append new prediction row(s), excluding the header
-    #       tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv
-
-    #       # Keep the header and latest 10 data rows
-    #       head -n 1 daily_flood_data.csv > /tmp/ten_days.csv
-    #       tail -n 10 daily_flood_data.csv >> /tmp/ten_days.csv
-    #       mv /tmp/ten_days.csv daily_flood_data.csv
-
-    #       git add daily_flood_data.csv
-
-    #       if git diff --cached --quiet; then
-    #         echo "No new data to commit"
-    #         exit 0
-    #       fi
-
-    #       git commit -m "Update flood monitoring data"
-
-    #       if git push origin main; then
-    #         echo "Push successful"
-    #         exit 0
-    #       fi
-
-    #       echo "Push failed; retrying with latest main..."
-
-    #       # Remove the local commit and restore the latest remote version
-    #       git reset --hard origin/main
-    #     done
-
-    #     echo "Failed to push after 5 attempts"
-    #     exit 1
-    - name: Diagnose Git branch state
+    - name: Save updated CSV to GitHub
       run: |
-        set -x
+        set -e
 
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-        echo "=== Current branch ==="
-        git branch -vv
+        # Save the newly generated prediction CSV
+        cp daily_flood_data.csv /tmp/new_daily_flood_data.csv
 
-        echo "=== Current commit ==="
-        git log -5 --oneline --decorate
+        # Retry in case main changes while this workflow is running
+        for attempt in 1 2 3 4 5; do
+          echo "Push attempt $attempt"
 
-        echo "=== Fetch remote main ==="
-        git fetch origin main
+          git fetch origin main
+          git checkout -B main origin/main
 
-        echo "=== Remote main commit ==="
-        git log -1 --oneline origin/main
+          # Append new prediction row(s), excluding the header
+          tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv
 
-        echo "=== Common ancestor ==="
-        git merge-base HEAD origin/main || true
+          # Keep the header and latest 10 data rows
+          head -n 1 daily_flood_data.csv > /tmp/ten_days.csv
+          tail -n 10 daily_flood_data.csv >> /tmp/ten_days.csv
+          mv /tmp/ten_days.csv daily_flood_data.csv
 
-        echo "=== Commits in local HEAD but not remote ==="
-        git log --oneline origin/main..HEAD
+          git add daily_flood_data.csv
 
-        echo "=== Commits in remote but not local HEAD ==="
-        git log --oneline HEAD..origin/main
+          if git diff --cached --quiet; then
+            echo "No new data to commit"
+            exit 0
+          fi
 
-        echo "=== Status ==="
-        git status
+          git commit -m "Update flood monitoring data"
+
+          if git push origin main; then
+            echo "Push successful"
+            exit 0
+          fi
+
+          echo "Push failed; retrying with latest main..."
+
+          # Remove the local commit and restore the latest remote version
+          git reset --hard origin/main
+        done
+
+        echo "Failed to push after 5 attempts"
+        exit 1
+    # - name: Diagnose Git branch state
+    #   run: |
+    #     set -x
+
+    #     git config user.name "github-actions[bot]"
+    #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    #     echo "=== Current branch ==="
+    #     git branch -vv
+
+    #     echo "=== Current commit ==="
+    #     git log -5 --oneline --decorate
+
+    #     echo "=== Fetch remote main ==="
+    #     git fetch origin main
+
+    #     echo "=== Remote main commit ==="
+    #     git log -1 --oneline origin/main
+
+    #     echo "=== Common ancestor ==="
+    #     git merge-base HEAD origin/main || true
+
+    #     echo "=== Commits in local HEAD but not remote ==="
+    #     git log --oneline origin/main..HEAD
+
+    #     echo "=== Commits in remote but not local HEAD ==="
+    #     git log --oneline HEAD..origin/main
+
+    #     echo "=== Status ==="
+    #     git status
         
     - name: 💾 Upload Results
       uses: actions/upload-artifact@v4
