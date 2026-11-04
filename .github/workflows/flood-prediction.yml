@@ -64,14 +64,16 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-        # Preserve the newly generated CSV temporarily
+        # Preserve the newly generated CSV
         cp daily_flood_data.csv /tmp/new_daily_flood_data.csv
 
-        # Fetch latest main and reset local branch to it
+        # Fetch the latest main branch
         git fetch origin main
-        git reset --hard origin/main
 
-        # Append only the newly generated data row(s)
+        # Move the local branch to the latest remote commit
+        git checkout -B main origin/main
+
+        # Append new data, excluding the header
         if [ -f /tmp/new_daily_flood_data.csv ]; then
           tail -n +2 /tmp/new_daily_flood_data.csv >> daily_flood_data.csv
         fi
@@ -86,7 +88,7 @@ jobs:
 
         if ! git diff --cached --quiet; then
           git commit -m "Update flood monitoring data"
-          git push origin HEAD:main
+          git push origin main
         else
           echo "No new data to commit"
         fi
